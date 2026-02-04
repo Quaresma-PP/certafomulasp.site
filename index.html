@@ -11,12 +11,15 @@
       --pad: 16px;
       --text: #111;
       --muted:#444;
-      --blue:#1d6be0;
-      --cyan:#f00000fa;
+      --blue:#31a813;
+      --cyan:#ffe607fa;
       --greyHero:#7a7a7a;
       --card:#fff;
       --shadow: 0 12px 30px rgba(0,0,0,.08);
       --radius: 18px;
+
+      /* 🔴 vermelho */
+      --red: #d0021b;
     }
 
     *{box-sizing:border-box}
@@ -139,9 +142,15 @@
       box-shadow: 0 12px 28px rgba(0,0,0,.20);
     }
 
-    /* ==========
-       SECTIONS
-       ========== */
+    /* 🔴 1) LINHA FULL (de um canto ao outro) logo abaixo do HERO */
+    .full-red-line{
+      width:100vw;
+      height:2px;
+      background:var(--red);
+      margin-left:calc(50% - 50vw);
+    }
+
+    /* ========== SECTIONS ========== */
     .section{ padding:46px 0; }
 
     .grid-2{
@@ -157,6 +166,17 @@
       font-weight:900;
       letter-spacing:-0.4px;
     }
+
+    /* 🔴 2) risquinho vermelho só no "Foco e atenção" */
+    .title::after{
+      content:"";
+      display:block;
+      width:32px;
+      height:2px;
+      background:var(--red);
+      margin-top:6px;
+    }
+
     .p{
       margin:0 0 18px;
       color:var(--muted);
@@ -203,6 +223,16 @@
       font-size:30px;
       font-weight:950;
       letter-spacing:-0.4px;
+    }
+
+    /* 🔴 3) risquinho vermelho só no "Nossos serviços" */
+    .h2::after{
+      content:"";
+      display:block;
+      width:32px;
+      height:2px;
+      background:var(--red);
+      margin:8px auto 0;
     }
 
     .cards{
@@ -332,6 +362,12 @@
 
       /* No mobile você só quer hambúrguer */
       .nav-link{ display:none; }
+
+      /* centraliza o risquinho do title no mobile */
+      .title::after{
+        margin-left:auto;
+        margin-right:auto;
+      }
     }
 
     @media (max-width: 380px){
@@ -340,25 +376,25 @@
     }
 
     /* CENTRALIZAR FOCO E ATENÇÃO NO MOBILE */
-@media (max-width: 860px){
-  .grid-2 > div:first-child{
-    text-align: center;
-  }
+    @media (max-width: 860px){
+      .grid-2 > div:first-child{
+        text-align: center;
+      }
 
-  .grid-2 > div:first-child .p{
-    margin-left: auto;
-    margin-right: auto;
-  }
+      .grid-2 > div:first-child .p{
+        margin-left: auto;
+        margin-right: auto;
+      }
 
-  .stats{
-    justify-content: center;
-    text-align: center;
-  }
+      .stats{
+        justify-content: center;
+        text-align: center;
+      }
 
-  .stat{
-    min-width: 120px;
-  }
-}
+      .stat{
+        min-width: 120px;
+      }
+    }
 
   </style>
 </head>
@@ -382,7 +418,6 @@
 
   <!-- HERO -->
   <section class="hero" id="inicio">
-    <!-- (opcional) decor no canto. Se não quiser, pode remover essa linha -->
     <img class="hero-decor" src="images/49ff77b1-0025-4e4f-b951-2d418a18d067-4ObBtkZP27JJXeJy.png" alt="" />
 
     <div class="wrap">
@@ -390,7 +425,6 @@
         Está em busca da sua <br/>energia diária?
        <span class="hi">Você está</span><br/>
         <span class="hi">  no lugar certo!</span><br/>
-        
       </h1>
 
       <div class="cta">
@@ -401,6 +435,9 @@
       </div>
     </div>
   </section>
+
+  <!-- 🔴 LINHA VERMELHA FULL -->
+  <div class="full-red-line"></div>
 
   <!-- FOCO E ATENÇÃO -->
   <section class="section">
@@ -455,14 +492,12 @@
           <div class="img logo">
             <img src="images/landing-page-takeda-logo-70JERh9siraAZlKZ.png" alt="Produto original lacrado" />
           </div>
-          <p >Produto original lacrado<p>
+          <p>Produto original lacrado</p>
         </div>
       </div>
 
-      <!-- ✅ BLOCO FINAL CORRIGIDO: só WhatsApp (SEM Takeda duplicado) -->
+      <!-- ✅ BLOCO FINAL (SEM Takeda duplicado) -->
       <div class="final">
- 
-        
         <a href="https://wa.me/5511995233057?text=Ol%C3%A1%2C%20gostaria%20de%20atendimento%20e%20informa%C3%A7%C3%B5es."
            target="_blank" rel="nofollow noopener">
           <img class="wa-banner" src="images/atendimento-whatsapp-1-Yw2YJVX9lzWZXVRR.png" alt="Atendimento via WhatsApp">
