@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Atendimento via WhatsApp</title>
+
+  <style>
+    :root{
+      --max: 1100px;
+      --pad: 16px;
+      --text: #111;
+      --muted:#444;
+      --blue:#31a813;
+      --cyan:#ffe607fa;
+      --greyHero:#7a7a7a;
+      --card:#fff;
+      --shadow: 0 12px 30px rgba(0,0,0,.08);
+      --radius: 18px;
+
+      /* 🔴 vermelho */
+      --red: #d0021b;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:#fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:0 var(--pad);
+    }
+
+    /* =====================
+       TOPBAR (mobile: 3 traços)
+       ===================== */
+    .topbar{
+      background:#fff;
+      border-bottom:1px solid #e9e9e9;
+    }
+    .topbar .nav{
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .nav-link{
+      font-size:14px;
+      opacity:.85;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .hamburger{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      background:none;
+      border:0;
+      cursor:pointer;
+      padding:10px;
+      margin-right:-10px; /* encosta no canto */
+    }
+    .hamburger span{
+      width:22px;
+      height:2px;
+      background:#111;
+      border-radius:2px;
+    }
+
+    .mobile-menu{
+      display:none;
+      background:#fff;
+    }
+    .mobile-menu a{
+      display:block;
+      padding:14px 20px;
+      font-size:14px;
+      border-top:1px solid #eee;
+    }
+
+    /* =========
+       HERO
+       ========= */
+    .hero{
+      background:var(--greyHero);
+      padding:64px 0 44px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-decor{
+      position:absolute;
+      left:-20px;
+      bottom:-30px;
+      width:220px;
+      opacity:.28;
+      pointer-events:none;
+      filter: grayscale(10%);
+    }
+
+    .hero h1{
+      margin:0 auto 18px;
+      font-weight:900;
+      line-height:1.08;
+      text-align:center;
+      color:#fff;
+      font-size: clamp(28px, 4vw, 52px);
+      max-width: 900px;
+      letter-spacing:-0.5px;
+      padding:0 6px;
+    }
+    .hero .hi{ color: var(--cyan); }
+
+    .cta{
+      display:flex;
+      justify-content:center;
+      margin-top:14px;
+    }
+
+    /* CTA como imagem */
+    .cta a{
+      display:inline-block;
+      width:min(280px, 86vw);
+    }
+    .cta img{
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.20);
+    }
+
+    /* 🔴 1) LINHA FULL (de um canto ao outro) logo abaixo do HERO */
+    .full-red-line{
+      width:100vw;
+      height:2px;
+      background:var(--red);
+      margin-left:calc(50% - 50vw);
+    }
+
+    /* ========== SECTIONS ========== */
+    .section{ padding:46px 0; }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:34px;
+      align-items:center;
+    }
+
+    .title{
+      margin:0 0 10px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-0.4px;
+    }
+
+    /* 🔴 2) risquinho vermelho só no "Foco e atenção" */
+    .title::after{
+      content:"";
+      display:block;
+      width:32px;
+      height:2px;
+      background:var(--red);
+      margin-top:6px;
+    }
+
+    .p{
+      margin:0 0 18px;
+      color:var(--muted);
+      line-height:1.55;
+      max-width:520px;
+      font-size:13px;
+    }
+
+    .stats{
+      display:flex;
+      gap:34px;
+      align-items:flex-start;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    .stat b{
+      display:block;
+      font-size:30px;
+      line-height:1;
+      color:var(--blue);
+    }
+    .stat small{
+      display:block;
+      margin-top:6px;
+      font-size:12px;
+      font-weight:700;
+      color:#333;
+    }
+
+    .phone{
+      display:flex;
+      justify-content:center;
+    }
+    .phone img{
+      width:min(260px, 86vw);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+    }
+
+    /* NOSSOS SERVIÇOS */
+    .center{ text-align:center; }
+    .h2{
+      margin:0 0 22px;
+      font-size:30px;
+      font-weight:950;
+      letter-spacing:-0.4px;
+    }
+
+    /* 🔴 3) risquinho vermelho só no "Nossos serviços" */
+    .h2::after{
+      content:"";
+      display:block;
+      width:32px;
+      height:2px;
+      background:var(--red);
+      margin:8px auto 0;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid #eee;
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+    }
+    .card .img{
+      aspect-ratio: 16 / 9;
+      overflow:hidden;
+      background:#f7f7f7;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card .img img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    /* Card 3: logo central sem cortar */
+    .card .img.logo{
+      background:#fff;
+    }
+    .card .img.logo img{
+      width:auto;
+      height:auto;
+      max-width:72%;
+      max-height:72%;
+      object-fit:contain;
+    }
+
+    .card p{
+      margin:10px 12px 14px;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+      color:#222;
+    }
+
+    /* BLOCO FINAL (corrigido: sem Takeda duplicado) */
+    .final{
+      padding: 22px 0 8px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+    .final .wa-banner{
+      width:min(280px, 86vw);
+      height:auto;
+      border-radius:12px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+    }
+
+    .badges{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      padding:10px 0 20px;
+    }
+    .badges img{
+      width:min(260px, 92vw);
+      height:auto;
+    }
+
+    /* WhatsApp flutuante */
+    .wa-float{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:50;
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      background:#25D366;
+      display:grid;
+      place-items:center;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    }
+    .wa-float svg{width:28px;height:28px; fill:#fff}
+
+    /* ======================
+       MOBILE – alinhado bonito
+       ====================== */
+    @media (max-width: 860px){
+      :root{ --pad: 16px; }
+
+      .hero{ padding:60px 0 40px; }
+      .hero h1{
+        font-size: 28px;
+        max-width: 520px;
+      }
+      .hero-decor{
+        width:200px;
+        left:-25px;
+        bottom:-28px;
+      }
+
+      .grid-2{
+        grid-template-columns: 1fr;
+        gap:18px;
+      }
+      .phone img{
+        width:min(260px, 78vw);
+      }
+
+      .cards{
+        grid-template-columns: 1fr;
+        gap:16px;
+      }
+
+      .h2{ margin-bottom:18px; }
+      .cta a{ width:min(260px, 82vw); }
+
+      .section{ padding:40px 0; }
+
+      /* No mobile você só quer hambúrguer */
+      .nav-link{ display:none; }
+
+      /* centraliza o risquinho do title no mobile */
+      .title::after{
+        margin-left:auto;
+        margin-right:auto;
+      }
+    }
+
+    @media (max-width: 380px){
+      .hero h1{ font-size: 26px; }
+      .stat b{ font-size:28px; }
+    }
+
+    /* CENTRALIZAR FOCO E ATENÇÃO NO MOBILE */
+    @media (max-width: 860px){
+      .grid-2 > div:first-child{
+        text-align: center;
+      }
+
+      .grid-2 > div:first-child .p{
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .stats{
+        justify-content: center;
+        text-align: center;
+      }
+
+      .stat{
+        min-width: 120px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="wrap nav">
+      <a href="#inicio" class="nav-link">Início</a>
+
+      <button class="hamburger" aria-label="Abrir menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#inicio" onclick="toggleMenu()">Início</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <img class="hero-decor" src="images/49ff77b1-0025-4e4f-b951-2d418a18d067-4ObBtkZP27JJXeJy.png" alt="" />
+
+    <div class="wrap">
+      <h1>
+        Está em busca da sua <br/>energia diária?
+       <span class="hi">Você está</span><br/>
+        <span class="hi">  no lugar certo!</span><br/>
+      </h1>
+
+      <div class="cta">
+        <a href="https://wa.me/5511995233057?text=Ol%C3%A1%2C%20gostaria%20de%20atendimento%20e%20informa%C3%A7%C3%B5es."
+           target="_blank" rel="nofollow noopener">
+          <img src="images/atendimento-whatsapp-1-Yw2YJVX9lzWZXVRR.png" alt="Atendimento via WhatsApp">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔴 LINHA VERMELHA FULL -->
+  <div class="full-red-line"></div>
+
+  <!-- FOCO E ATENÇÃO -->
+  <section class="section">
+    <div class="wrap grid-2">
+      <div>
+        <h2 class="title">Foco e atenção</h2>
+        <p class="p">
+          Tornamos acessível a venda  dos melhores nootrópicos do mercado. Produto original lacrado.
+        </p>
+
+        <div class="stats">
+          <div class="stat">
+            <b>100%</b>
+            <small>Garantia total</small>
+          </div>
+          <div class="stat">
+            <b>+1000</b>
+            <small>Clientes satisfeitos</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <img src="images/whatsapp-image-2025-04-09-at-22.47.53-LzWsdL1xeaPfi8jd.png" alt="Atendimento" />
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSSOS SERVIÇOS -->
+  <section class="section" style="padding-top:10px;">
+    <div class="wrap">
+      <div class="center">
+        <h2 class="h2">Nossos serviços</h2>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="img">
+            <img src="images/49ff77b1-0025-4e4f-b951-2d418a18d067-4ObBtkZP27JJXeJy.png" alt="Envio" />
+          </div>
+          <p>Envio rápido e seguro</p>
+        </div>
+
+        <div class="card">
+          <div class="img">
+            <img src="images/embalagem-4-1-BKyotxjVHBPpEBCw.png" alt="Embalagem" />
+          </div>
+          <p>Embalagem discreta</p>
+        </div>
+
+        <div class="card">
+          <div class="img logo">
+            <img src="images/landing-page-takeda-logo-70JERh9siraAZlKZ.png" alt="Produto original lacrado" />
+          </div>
+          <p>Produto original lacrado</p>
+        </div>
+      </div>
+
+      <!-- ✅ BLOCO FINAL (SEM Takeda duplicado) -->
+      <div class="final">
+        <a href="https://wa.me/5511995233057?text=Ol%C3%A1%2C%20gostaria%20de%20atendimento%20e%20informa%C3%A7%C3%B5es."
+           target="_blank" rel="nofollow noopener">
+          <img class="wa-banner" src="images/atendimento-whatsapp-1-Yw2YJVX9lzWZXVRR.png" alt="Atendimento via WhatsApp">
+        </a>
+      </div>
+
+      <div class="badges">
+        <img src="images/dasdsa-1-TfmpQZoKjosEbFGP.png" alt="Garantia de Entrega" />
+        <img src="images/5e5b1c578497b0d85fbf318329a0cf1f-1-ikndLgOUxvcj0gS8_2.png" alt="Produtos Originais" />
+        <img src="images/site_seguro-1-MBlnN3aiCCulEdHj.png" alt="Site Seguro" />
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp flutuante -->
+  <a class="wa-float"
+     href="https://wa.me/5511995233057?text=Ol%C3%A1%2C%20gostaria%20de%20atendimento%20e%20informa%C3%A7%C3%B5es."
+     target="_blank" rel="nofollow noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M19.11 17.53c-.27-.14-1.6-.79-1.85-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.31.2-.58.07-.27-.14-1.12-.41-2.13-1.31-.79-.7-1.33-1.56-1.49-1.83-.16-.27-.02-.41.12-.55.12-.12.27-.31.41-.47.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.47-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.47l-.52-.01c-.18 0-.47.07-.71.34-.25.27-.95.93-.95 2.27 0 1.34.97 2.63 1.11 2.81.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.27.18 1.75.11.53-.08 1.6-.65 1.83-1.27.23-.61.23-1.13.16-1.24-.07-.11-.25-.18-.52-.32z"/>
+      <path d="M16 3C9.37 3 4 8.37 4 15c0 2.11.55 4.09 1.5 5.82L4 29l8.34-1.46A11.93 11.93 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3zm0 21.73c-1.23 0-2.44-.23-3.56-.69l-.51-.21-4.95.87.91-4.82-.25-.5A9.76 9.76 0 0 1 6.27 15c0-5.37 4.37-9.73 9.73-9.73S25.73 9.63 25.73 15 21.37 24.73 16 24.73z"/>
+    </svg>
+  </a>
+
+  <script>
+    function toggleMenu(){
+      const menu = document.getElementById('mobileMenu');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // fecha menu ao clicar fora
+    document.addEventListener('click', function(e){
+      const menu = document.getElementById('mobileMenu');
+      const burger = document.querySelector('.hamburger');
+      if(!menu || !burger) return;
+
+      const clickedInsideMenu = menu.contains(e.target);
+      const clickedBurger = burger.contains(e.target);
+
+      if(menu.style.display === 'block' && !clickedInsideMenu && !clickedBurger){
+        menu.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
